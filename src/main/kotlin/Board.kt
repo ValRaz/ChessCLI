@@ -50,6 +50,40 @@ class Board {
         }
     }
 
+    //helper to get the piece at a given position
+    private fun getPiece(pos: Position): Piece? =
+        squares[pos.rankIndex()][pos.fileIndex()]
+
+    //helper to check if a position exists on the board
+    private fun isInBounds(pos: Position): Boolean =
+        pos.file in 'a'..'h' && pos.rank in 1..8
+
+    //Moves a piece to a new square. Returns true for valid move and false for invalid move.
+    fun makeMove(from: Position, to: Position): Boolean {
+        val piece = getPiece(from) ?: return false
+        if (!isInBounds(to)) return false
+
+        //Validates move is listed in possible moves for the piece
+        if (to !in piece.possibleMoves()) return false
+
+        //Logs which piece is being moved
+        when (piece) {
+            is Pawn -> println("Pawn moves from $from to $to")
+            is Rook -> println("Rook moves from $from to $to")
+            is Knight -> println("Knight moves from $from to $to")
+            is Bishop -> println("Bishop moves from $from to $to")
+            is Queen -> println("Queen moves from $from to $to")
+            is King -> println("King moves from $from to $to")
+        }
+
+        //Executes the move, clears old square, and updates piece place at new square
+        squares[from.rankIndex()][from.fileIndex()] = null
+        piece.position = to
+        squares[to.rankIndex()][to.fileIndex()] = piece
+
+        return true
+    }
+
     //Renders the board as a multi-line string using '.' for empty squares.
     override fun toString(): String {
         val sb = StringBuilder()
