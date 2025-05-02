@@ -13,11 +13,48 @@ class Board {
         }
     }
 
+    //Initializes the board with all pieces at starting positions
+    fun initBoard() {
+        //White pawn placement
+        for (fileIdx in 0 until 8) {
+            val pos = Position(('a' + fileIdx), 2)
+            val pawn = Pawn(pos, Color.WHITE)
+            placePiece(pawn, pos)
+        }
+
+        //Black pawn placement
+        for (fileIdx in 0 until 8) {
+            val pos = Position(('a' + fileIdx), 7)
+            val pawn = Pawn(pos, Color.BLACK)
+            placePiece(pawn, pos)
+        }
+
+        //Major piece order for Black and White
+        val majorOrder = listOf<(Position, Color) -> Piece>(
+            ::Rook, ::Knight, ::Bishop, ::Queen,
+            ::King, ::Bishop, ::Knight, ::Rook
+        )
+
+        //Major piece placement for White
+        for ((fileIdx, constructor) in majorOrder.withIndex()) {
+            val pos = Position(('a' + fileIdx), 1)
+            val piece = constructor(pos, Color.WHITE)
+            placePiece(piece, pos)
+        }
+
+        //Major piece placement for Black
+        for ((fileIdx, constructor) in majorOrder.withIndex()) {
+            val pos = Position(('a' + fileIdx), 8)
+            val piece = constructor(pos, Color.BLACK)
+            placePiece(piece, pos)
+        }
+    }
+
     //Renders the board as a multi-line string using '.' for empty squares.
     override fun toString(): String {
         val sb = StringBuilder()
         for (rank in 7 downTo 0) {
-            sb.append("${rank + 1}")
+            sb.append("${rank + 1} ")
             for (file in 0..7) {
                 val piece = squares[rank][file]
                 sb.append(piece?.toString() ?: ".").append(" ")

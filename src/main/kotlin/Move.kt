@@ -1,0 +1,1 @@
+data class Move(val from: Position, val to: javax.swing.text.Position)
