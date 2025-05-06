@@ -84,18 +84,27 @@ class Board {
         return true
     }
 
-    //Renders the board as a multi-line string using '.' for empty squares.
-    override fun toString(): String {
-        val sb = StringBuilder()
-        for (rank in 7 downTo 0) {
-            sb.append("${rank + 1} ")
-            for (file in 0..7) {
-                val piece = squares[rank][file]
-                sb.append(piece?.toString() ?: ".").append(" ")
+    //Helper to apply the move
+    fun applyMove(move: Move): Boolean =
+        makeMove(move.from, move.to)
+
+    //Renders the board.
+    fun drawBoard() {
+        print("    ")
+        for (c in 'a'..'h') print("$c   ")
+        println()
+
+        val divider = "  +" + List(8) {"---+"}.joinToString("")
+        for (rank in 8 downTo 1) {
+            println(divider)
+            print("$rank ")
+            for (file in 'a'..'h') {
+                val piece = squares[rank - 1][file - 'a']
+                val symbol = piece?.toString() ?: " "
+                print("| $symbol ")
             }
-            sb.append("\n")
+            println("|")
         }
-        sb.append(" a b c d e f g h\n")
-        return sb.toString()
+        println(divider)
     }
 }
