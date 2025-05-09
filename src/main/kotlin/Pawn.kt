@@ -19,6 +19,18 @@ class Pawn(position: Position, color: Color) : Piece(position, color) {
                 moves.add(twoStep)
             }
         }
+
+        //Diagonal left capture
+        val diagL = Position(position.file - 1, position.rank + dir)
+        if (diagL.file in 'a'..'h' && diagL.rank in 1..8) {
+            moves += diagL
+        }
+
+        //Diagonal Right capture
+        val diagR = Position(position.file + 1, position.rank + dir)
+        if (diagR.file in 'a'..'h' && diagR.rank in 1..8) {
+            moves += diagR
+        }
         return moves
     }
 

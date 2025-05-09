@@ -63,6 +63,23 @@ class Board {
         val piece = getPiece(from) ?: return false
         if (!isInBounds(to)) return false
 
+        //Same color capture check
+        val targetPiece = getPiece(to)
+        if(targetPiece != null && targetPiece.color == piece.color) {
+            return false
+        }
+
+        //Pawn diagonal move for capture check
+        if (piece is Pawn) {
+            val leftRight = to.fileIndex() - from.fileIndex()
+            val forwdBckwd = to.rankIndex() - from.rankIndex()
+            val direction = if (piece.color == Color.WHITE) + 1 else - 1
+            val invalidCap = (forwdBckwd == direction && (leftRight == 1 || leftRight == - 1))
+            if (invalidCap && targetPiece == null) {
+                return false
+            }
+        }
+
         //Validates move is listed in possible moves for the piece
         if (to !in piece.possibleMoves()) return false
 
@@ -107,4 +124,8 @@ class Board {
         }
         println(divider)
     }
+
+    //Unit Testing helper
+    fun getPieceAt(pos: Position): Piece? =
+        squares[pos.rankIndex()][pos.fileIndex()]
 }
