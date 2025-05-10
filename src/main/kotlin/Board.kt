@@ -81,7 +81,7 @@ class Board {
         }
 
         //Validates move is listed in possible moves for the piece
-        if (to !in piece.possibleMoves()) return false
+        if (to !in piece.possibleMoves(this)) return false
 
         //Logs which piece is being moved
         when (piece) {
